@@ -7,6 +7,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.spec.SecretKeySpec;
+
 public class PrivateKeyRing {
 
 	/*
@@ -58,18 +60,25 @@ public class PrivateKeyRing {
 
 		byte[] encodedKey = record.getEncodedKey();
 		String keyType = record.getKeyType();
+		String keyAlgorithm = keyType.split("/")[0];
+		String keyFormat = keyType.split("/")[1];
 
 		Key key = null;
-		KeyFactory keyFactory;
-		if (keyType.startsWith("E"))
-			keyFactory = KeyFactory.getInstance("RSA");
-		else
-			keyFactory = KeyFactory.getInstance("DSA");
+		if (keyAlgorithm.equals("RSA") || keyAlgorithm.equals("DSA")) {
+			KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm);
 
-		if (keyType.endsWith("PK"))
-			key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		else
-			key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
+			if (keyFormat.equals("X.509"))
+				key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			else if (keyFormat.equals("PKCS#8"))
+				key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
+		} else {
+			// Genero la chiave opaca a partire dall'array di byte
+			// (SecretKeySpec implementa sia KeySpec che SecretKey). Opero in
+			// questo modo perché in Java manca il SecretKeyFactory per AES (è
+			// un bug conosciuto, sono supportati solo DES e DESede).
+			// http://bugs.java.com/view_bug.do?bug_id=7022467
+			key = new SecretKeySpec(encodedKey, keyAlgorithm);
+		}
 
 		if (key == null)
 			throw new Exception("Invalid key type!");
@@ -100,7 +109,7 @@ public class PrivateKeyRing {
 
 		private String alias;
 		private byte[] encodedKey;
-		private String keyType;
+		private String keyType; // "Algorithm/Format" (e.g. RSA/X.509)
 
 		public Record(String alias, byte[] encodedKey, String keyType) {
 			this.alias = alias;

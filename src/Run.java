@@ -1,3 +1,4 @@
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
@@ -21,15 +22,23 @@ public class Run {
 		keyPairGen.initialize(1024);
 		KeyPair DSAKeyPair = keyPairGen.genKeyPair();
 
-		// Inserisco le coppie di chiavi generate (RSA e DSA) nel mazzo di chiavi privato
+		// Inserisco le coppie di chiavi generate (RSA e DSA) nel mazzo di
+		// chiavi privato
+		Key key = RSAKeyPair.getPublic();
 		// EPK = public encryption key
-		skr.setKey(groupName + "_EPK", RSAKeyPair.getPublic(), "EPK");
+		skr.setKey(groupName + "_EPK", key, key.getAlgorithm() + "/" + key.getFormat());
+
+		key = RSAKeyPair.getPrivate();
 		// ESK = private decryption key
-		skr.setKey(groupName + "_ESK", RSAKeyPair.getPrivate(), "ESK");
+		skr.setKey(groupName + "_ESK", key, key.getAlgorithm() + "/" + key.getFormat());
+
+		key = DSAKeyPair.getPublic();
 		// SPK = public verification key
-		skr.setKey(groupName + "_SPK", DSAKeyPair.getPublic(), "SPK");
+		skr.setKey(groupName + "_SPK", key, key.getAlgorithm() + "/" + key.getFormat());
+
+		key = DSAKeyPair.getPrivate();
 		// SSK = private signing key
-		skr.setKey(groupName + "_SSK", DSAKeyPair.getPrivate(), "SSK");
+		skr.setKey(groupName + "_SSK", key, key.getAlgorithm() + "/" + key.getFormat());
 
 		// Genero una chiave AES a 128 bit
 		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -42,10 +51,10 @@ public class Run {
 		SecretKey DESedeKey = keyGen.generateKey();
 
 		// Inserisco le chiavi AES e DESede nel mazzo di chiavi privato
-		skr.setKey(groupName + "_AES", AESKey, "EPK");
-		skr.setKey(groupName + "_DESede", DESedeKey, "ESK");
+		skr.setKey(groupName + "_AES", AESKey, AESKey.getAlgorithm() + "/" + AESKey.getFormat());
+		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
 
-		System.out.println(skr.getKey(groupName + "_SPK"));
+		System.out.println(skr.getKey(groupName + "_EPK").getFormat());
 	}
 
 }
