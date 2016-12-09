@@ -1,12 +1,22 @@
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.SealedObject;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class PrivateKeyRing {
@@ -40,16 +50,50 @@ public class PrivateKeyRing {
 	 */
 
 	private static PrivateKeyRing instance = null;
-	private List<Record> keyRing;
+	private ArrayList<Record> keyRing;
 
-	private PrivateKeyRing() throws InvalidKeySpecException, NoSuchAlgorithmException {
+	private PrivateKeyRing() {
 		keyRing = new ArrayList<>();
 	}
 
-	public static PrivateKeyRing getInstance() throws InvalidKeySpecException, NoSuchAlgorithmException {
+	public static PrivateKeyRing getInstance() {
 		if (instance == null)
 			instance = new PrivateKeyRing();
 		return instance;
+	}
+
+	public void load(InputStream is, char[] password) {
+
+	}
+
+	public void store(OutputStream os, char[] password) throws IllegalBlockSizeException, Exception {
+		// Genero la SecretKey (chiave opaca) a partire dalla password e dal
+		// salt
+		SecureRandom random = new SecureRandom();
+		byte salt[] = new byte[8];
+		random.nextBytes(salt);
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		KeySpec keySpec = new PBEKeySpec(password, salt, 65536, 128);
+		SecretKey tmp = factory.generateSecret(keySpec);
+		SecretKey key = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+		// Ottengo una istanza del cifrario e lo inizializzo
+		Cipher cipher = Cipher.getInstance("AES/CFB/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+
+		// Creo il SealedObject del KeyRing per poterlo proteggere
+		SealedObject sealedObject = new SealedObject(keyRing, cipher);
+
+		// Salvo il salt e l'IV sul disco
+		os.write(salt);
+		os.write(cipher.getIV());
+
+		// Salvo il KeyRing sul disco
+		CipherOutputStream cos = new CipherOutputStream(os, cipher);
+		ObjectOutputStream oos = new ObjectOutputStream(cos);
+		oos.writeObject(sealedObject);
+
+		oos.close();
 	}
 
 	// La key restituita è una chiave opaca
@@ -105,7 +149,9 @@ public class PrivateKeyRing {
 	}
 
 	// Classe innestata da documentare
-	public static final class Record {
+	public static final class Record implements Serializable {
+
+		private static final long serialVersionUID = 1L;
 
 		private String alias;
 		private byte[] encodedKey;

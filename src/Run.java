@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -55,6 +57,8 @@ public class Run {
 		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
 
 		System.out.println(skr.getKey(groupName + "_EPK").getFormat());
+
+		skr.store(new FileOutputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
 	}
 
 }
