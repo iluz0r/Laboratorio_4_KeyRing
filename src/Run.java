@@ -1,8 +1,10 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.util.Base64;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -56,9 +58,31 @@ public class Run {
 		skr.setKey(groupName + "_AES", AESKey, AESKey.getAlgorithm() + "/" + AESKey.getFormat());
 		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
 
-		System.out.println(skr.getKey(groupName + "_EPK").getFormat());
+		// Ottengo le chiavi nel KeyRing privato e le stampo a video in base64
+		String epkPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_EPK").getEncoded());
+		String eskPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_ESK").getEncoded());
+		String spkPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SPK").getEncoded());
+		String sskPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SSK").getEncoded());
+
+		System.out.println("/*** CHIAVI PRIMA DELLA LOAD DAL DISCO ***/");
+		System.out.println(epkPreload);
+		System.out.println(eskPreload);
+		System.out.println(spkPreload);
+		System.out.println(sskPreload);
 
 		skr.store(new FileOutputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
+		skr.load(new FileInputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
+
+		String epkPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_EPK").getEncoded());
+		String eskPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_ESK").getEncoded());
+		String spkPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SPK").getEncoded());
+		String sskPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SSK").getEncoded());
+
+		System.out.println("\n/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
+		System.out.println(epkPostload);
+		System.out.println(eskPostload);
+		System.out.println(spkPostload);
+		System.out.println(sskPostload);
 	}
 
 }
