@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 
 public class Run {
 
-	private static final String groupName = "I2X3";
+	private final static String groupName = "I2X3";
 
 	public static void main(String[] args) throws Exception {
 		PrivateKeyRing skr = PrivateKeyRing.getInstance();
