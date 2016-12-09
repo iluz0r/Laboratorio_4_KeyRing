@@ -50,14 +50,15 @@ public class PrivateKeyRing {
 		return instance;
 	}
 
+	// La key restituita è una chiave opaca
 	public Key getKey(String alias) throws Exception {
 		Record record = findRecord(alias);
 		if (record == null)
 			throw new Exception("Key not found!");
-		
+
 		byte[] encodedKey = record.getEncodedKey();
 		String keyType = record.getKeyType();
-		
+
 		Key key = null;
 		KeyFactory keyFactory;
 		if (keyType.startsWith("E"))
@@ -76,14 +77,16 @@ public class PrivateKeyRing {
 		return key;
 	}
 
-	public void setKey(String alias, Key key, String keyType) throws Exception {
+	// La key presa in ingresso è una chiave opaca
+	public void setKey(String alias, Key key, String keyType) {
 		Record record = findRecord(alias);
 		if (record != null)
-			throw new Exception("Alias already used!");
+			keyRing.remove(record);
 
 		keyRing.add(new Record(alias, key.getEncoded(), keyType));
 	}
 
+	// Funzioncina di comodo da documentare
 	private Record findRecord(String alias) {
 		Record record = null;
 		for (Record r : keyRing)
@@ -92,11 +95,11 @@ public class PrivateKeyRing {
 		return record;
 	}
 
-	/* Nested class */
+	// Classe innestata da documentare
 	public static final class Record {
 
 		private String alias;
-		private byte[] encodedKey; // chiave trasparente
+		private byte[] encodedKey;
 		private String keyType;
 
 		public Record(String alias, byte[] encodedKey, String keyType) {
