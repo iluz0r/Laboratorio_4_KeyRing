@@ -1,7 +1,5 @@
 import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -40,30 +38,10 @@ public class PrivateKeyRing {
 	 */
 
 	private static PrivateKeyRing instance = null;
-	private static final String groupName = "I2X3";
 	private List<Record> keyRing;
 
 	private PrivateKeyRing() throws InvalidKeySpecException, NoSuchAlgorithmException {
-		// Costruttore di prova, questo codice dovrà essere eliminato
 		keyRing = new ArrayList<>();
-
-		KeyPair keyPairRSA, keyPairDSA;
-		KeyPairGenerator keyPairGenRSA = KeyPairGenerator.getInstance("RSA");
-		keyPairGenRSA.initialize(1024);
-		keyPairRSA = keyPairGenRSA.genKeyPair();
-
-		KeyPairGenerator keyPairGenDSA = KeyPairGenerator.getInstance("DSA");
-		keyPairGenDSA.initialize(1024);
-		keyPairDSA = keyPairGenDSA.genKeyPair();
-
-		// EPK = public encryption key
-		keyRing.add(new Record(groupName + "_EPK", keyPairRSA.getPublic().getEncoded(), "EPK"));
-		// ESK = private decryption key
-		keyRing.add(new Record(groupName + "_ESK", keyPairRSA.getPrivate().getEncoded(), "ESK"));
-		// SPK = public verification key
-		keyRing.add(new Record(groupName + "_SPK", keyPairDSA.getPublic().getEncoded(), "SPK"));
-		// SSK = private signing key
-		keyRing.add(new Record(groupName + "_SSK", keyPairDSA.getPrivate().getEncoded(), "SSK"));
 	}
 
 	public static PrivateKeyRing getInstance() throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -103,8 +81,15 @@ public class PrivateKeyRing {
 		return key;
 	}
 
-	public void setKey(String alias, Key key, String keyType) {
+	public void setKey(String alias, Key key, String keyType) throws Exception {
+		boolean found = false;
+		for (Record r : keyRing)
+			if (r.getAlias().equals(alias))
+				found = true;
+		if (found)
+			throw new Exception("Alias already used!");
 
+		keyRing.add(new Record(alias, key.getEncoded(), keyType));
 	}
 
 	/* Nested class */
