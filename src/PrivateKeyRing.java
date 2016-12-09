@@ -44,6 +44,7 @@ public class PrivateKeyRing {
 	private List<Record> keyRing;
 
 	private PrivateKeyRing() throws InvalidKeySpecException, NoSuchAlgorithmException {
+		// Costruttore di prova, questo codice dovrà essere eliminato
 		keyRing = new ArrayList<>();
 
 		KeyPair keyPairRSA, keyPairDSA;
@@ -104,6 +105,10 @@ public class PrivateKeyRing {
 			throw new Exception("Invalid key type!");
 
 		return key;
+	}
+	
+	public void setKey(String alias, Key key, String keyType) {
+		
 	}
 
 	/* Nested class */
