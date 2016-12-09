@@ -59,30 +59,47 @@ public class Run {
 		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
 
 		// Ottengo le chiavi nel KeyRing privato e le stampo a video in base64
-		String epkPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_EPK").getEncoded());
-		String eskPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_ESK").getEncoded());
-		String spkPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SPK").getEncoded());
-		String sskPreload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SSK").getEncoded());
+		String epkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_EPK").getEncoded());
+		String eskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_ESK").getEncoded());
+		String spkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SPK").getEncoded());
+		String sskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SSK").getEncoded());
+		String aesPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
+		String desedePreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
 
 		System.out.println("/*** CHIAVI PRIMA DELLA LOAD DAL DISCO ***/");
 		System.out.println(epkPreload);
 		System.out.println(eskPreload);
 		System.out.println(spkPreload);
 		System.out.println(sskPreload);
+		System.out.println(aesPreload);
+		System.out.println(desedePreload);
 
+		// Salvo sul disco il KeyRing privato
 		skr.store(new FileOutputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
+
+		// Carico il KeyRing privato dal disco
 		skr.load(new FileInputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
 
-		String epkPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_EPK").getEncoded());
-		String eskPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_ESK").getEncoded());
-		String spkPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SPK").getEncoded());
-		String sskPostload = Base64.getEncoder().encodeToString(skr.getKey("I2X3_SSK").getEncoded());
+		String epkPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_EPK").getEncoded());
+		String eskPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_ESK").getEncoded());
+		String spkPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SPK").getEncoded());
+		String sskPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SSK").getEncoded());
+		String aesPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
+		String desedePostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
 
-		System.out.println("\n/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
+		System.out.println("/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
 		System.out.println(epkPostload);
 		System.out.println(eskPostload);
 		System.out.println(spkPostload);
 		System.out.println(sskPostload);
+		System.out.println(aesPostload);
+		System.out.println(desedePostload);
+
+		if (epkPreload.equals(epkPostload) && eskPreload.equals(eskPostload) && spkPreload.equals(spkPostload)
+				&& sskPreload.equals(sskPostload) && aesPreload.equals(aesPostload)
+				&& desedePreload.equals(desedePostload))
+			System.out.println(
+					"\nLe chiavi recuperate dal disco sono identiche alle chiavi presenti nel KeyRing prima del salvataggio");
 	}
 
 }
