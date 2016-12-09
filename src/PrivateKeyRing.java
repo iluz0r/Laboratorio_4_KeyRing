@@ -86,29 +86,25 @@ public class PrivateKeyRing {
 			throw new Exception("Key not found!");
 
 		Key key = null;
-		if (keyType.equals("EPK") || keyType.equals("ESK")) {
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			if (keyType.equals("EPK"))
-				key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			else
-				key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
-		}
-		if (keyType.equals("SPK") || keyType.equals("SSK")) {
-			KeyFactory keyFactory = KeyFactory.getInstance("DSA");
-			if (keyType.equals("SPK"))
-				key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			else
-				key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
-		}
+		KeyFactory keyFactory;
+		if (keyType.startsWith("E"))
+			keyFactory = KeyFactory.getInstance("RSA");
+		else
+			keyFactory = KeyFactory.getInstance("DSA");
+
+		if (keyType.endsWith("PK"))
+			key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		else
+			key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
 
 		if (key == null)
 			throw new Exception("Invalid key type!");
 
 		return key;
 	}
-	
+
 	public void setKey(String alias, Key key, String keyType) {
-		
+
 	}
 
 	/* Nested class */
