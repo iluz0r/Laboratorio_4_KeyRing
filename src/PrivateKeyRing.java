@@ -1,5 +1,6 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 public class PrivateKeyRing {
 
@@ -32,10 +33,30 @@ public class PrivateKeyRing {
 	 */
 
 	private static PrivateKeyRing instance = null;
-	private List<Record> keyRing;
+	private static final String groupName = "I2X3";
 
 	private PrivateKeyRing() {
-		keyRing = new ArrayList<Record>();
+		KeyPair keyPairRSA, keyPairDSA;
+		try {
+			KeyPairGenerator keyPairGenRSA = KeyPairGenerator.getInstance("RSA");
+			keyPairGenRSA.initialize(1024);
+			keyPairRSA = keyPairGenRSA.genKeyPair();
+
+			KeyPairGenerator keyPairGenDSA = KeyPairGenerator.getInstance("DSA");
+			keyPairGenDSA.initialize(1024);
+			keyPairDSA = keyPairGenDSA.genKeyPair();
+
+			// EPK = public encryption key
+			new Record(groupName + "_EPK", keyPairRSA.getPublic().getEncoded());
+			// ESK = private decryption key
+			new Record(groupName + "_ESK", keyPairRSA.getPrivate().getEncoded());
+			// SPK = public verification key
+			new Record(groupName + "_SPK", keyPairDSA.getPublic().getEncoded());
+			// SSK = private signing key
+			new Record(groupName + "_SSK", keyPairDSA.getPrivate().getEncoded());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static PrivateKeyRing getInstance() {
@@ -48,14 +69,19 @@ public class PrivateKeyRing {
 	public static final class Record {
 
 		private String alias;
-		private byte[] key;
+		private byte[] encodedKey;
+
+		public Record(String alias, byte[] encodedKey) {
+			this.alias = alias;
+			this.encodedKey = encodedKey;
+		}
 
 		public String getAlias() {
 			return alias;
 		}
 
-		public byte[] getKey() {
-			return key;
+		public byte[] getEncodedKey() {
+			return encodedKey;
 		}
 
 	}
