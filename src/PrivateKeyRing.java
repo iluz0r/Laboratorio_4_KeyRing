@@ -51,18 +51,13 @@ public class PrivateKeyRing {
 	}
 
 	public Key getKey(String alias) throws Exception {
-		byte[] encodedKey = null;
-		String keyType = null;
-		for (Record r : keyRing) {
-			if (r.getAlias().equals(alias)) {
-				encodedKey = r.getEncodedKey();
-				keyType = r.getKeyType();
-			}
-		}
-
-		if (encodedKey == null)
+		Record record = findRecord(alias);
+		if (record == null)
 			throw new Exception("Key not found!");
-
+		
+		byte[] encodedKey = record.getEncodedKey();
+		String keyType = record.getKeyType();
+		
 		Key key = null;
 		KeyFactory keyFactory;
 		if (keyType.startsWith("E"))
@@ -82,14 +77,19 @@ public class PrivateKeyRing {
 	}
 
 	public void setKey(String alias, Key key, String keyType) throws Exception {
-		boolean found = false;
-		for (Record r : keyRing)
-			if (r.getAlias().equals(alias))
-				found = true;
-		if (found)
+		Record record = findRecord(alias);
+		if (record != null)
 			throw new Exception("Alias already used!");
 
 		keyRing.add(new Record(alias, key.getEncoded(), keyType));
+	}
+
+	private Record findRecord(String alias) {
+		Record record = null;
+		for (Record r : keyRing)
+			if (r.getAlias().equals(alias))
+				record = r;
+		return record;
 	}
 
 	/* Nested class */
