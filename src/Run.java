@@ -106,12 +106,12 @@ public class Run {
 		String desedePostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
 
 		System.out.println("/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
-		System.out.println(epkPostload);
-		System.out.println(eskPostload);
-		System.out.println(spkPostload);
-		System.out.println(sskPostload);
-		System.out.println(aesPostload);
-		System.out.println(desedePostload);
+		System.out.println("Foo_EPK: " + epkPostload);
+		System.out.println("Foo_ESK: " + eskPostload);
+		System.out.println("Foo_SPK: " + spkPostload);
+		System.out.println("Foo_SSK: " + sskPostload);
+		System.out.println("Foo_AES: " + aesPostload);
+		System.out.println("Foo_DESede: " + desedePostload);
 
 //		if (epkPreload.equals(epkPostload) && eskPreload.equals(eskPostload) && spkPreload.equals(spkPostload)
 //				&& sskPreload.equals(sskPostload) && aesPreload.equals(aesPostload)
@@ -207,10 +207,12 @@ public class Run {
 		bw.write("**********************************************");
 		bw.close();
 
+		// Ottengo una istanza di Signature e la inizializzo con la Foo_SSK
 		Signature dsa = Signature.getInstance("SHA1withDSA");
 		PrivateKey fooSSK = (PrivateKey) skr.getKey("Foo_SSK");
 		dsa.initSign(fooSSK);
 
+		// Prelevo i dati che devono essere firmati e li aggiorno con il metodo update
 		FileInputStream fis = new FileInputStream(new File("test.bin"));
 		BufferedInputStream bis = new BufferedInputStream(fis);
 		byte[] buffer = new byte[1024];
@@ -220,8 +222,10 @@ public class Run {
 		}
 		bis.close();
 
+		// Firmo i dati ottenendo la signature
 		byte[] signature = dsa.sign();
 
+		// Salvo sul disco la signature cifrata con RSA (con la chiave pubblica del team Ancora)
 		cipher = Cipher.getInstance("RSA");
 		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
 
