@@ -174,7 +174,7 @@ public class Run {
 		// Recupero dal PublicKeyRing la EPK del team Ancora e inizializzo il
 		// cifrario in modalità RSA con questa chiave
 		PublicKey ancoraEPK = (PublicKey) pkr.getKey("Ancora_EPK");
-		Cipher cipher = Cipher.getInstance("RSA");
+		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
 
 		// Salvo sul file la chiave (opaca) AES generata in precedenza,
@@ -226,7 +226,7 @@ public class Run {
 		byte[] signature = dsa.sign();
 
 		// Salvo sul disco la signature cifrata con RSA (con la chiave pubblica del team Ancora)
-		cipher = Cipher.getInstance("RSA");
+		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
 
 		fos = new FileOutputStream(new File("signature.bin"));
