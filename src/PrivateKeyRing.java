@@ -3,14 +3,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyFactory;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 
 import javax.crypto.Cipher;
@@ -23,7 +18,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class PrivateKeyRing {
+public class PrivateKeyRing extends KeyRing {
 
 	/*
 	 * KeyRing = mazzo di chiavi, strumento per memorizzare (e quindi
@@ -41,10 +36,10 @@ public class PrivateKeyRing {
 	 * Supponiamo che Angelo voglia comunicare con Christian e Marcello; ciascun
 	 * utente ha una coppia di chiavi (pubblica/privata, il KeyPair in sostanza)
 	 * generate opportunamente. Ciascun utente, inoltre, avrà nel proprio mazzo
-	 * di chiavi anche tutte le chiavi "pubbliche" degli altri. Se Angelo vuole
-	 * comunicare con Christian cosa succede? Angelo cifra
-	 * "con la chiave pubblica di Christian" il messaggio; quando il messaggio
-	 * arriva a Christian, quest'ultimo può decifrarlo con la
+	 * di chiavi (nel lab è il PublicKeyRing) anche tutte le chiavi "pubbliche"
+	 * degli altri. Se Angelo vuole comunicare con Christian cosa succede?
+	 * Angelo cifra "con la chiave pubblica di Christian" il messaggio; quando
+	 * il messaggio arriva a Christian, quest'ultimo può decifrarlo con la
 	 * "propria chiave privata"; viceversa, quando Christian vuole comuninicare
 	 * con Angelo, cifra il messaggio con la k_pub di Angelo, e Angelo decifrerà
 	 * il messaggio con la propria chiave privata. In sostanza, le chiavi
@@ -54,10 +49,9 @@ public class PrivateKeyRing {
 	 */
 
 	private static PrivateKeyRing instance = null;
-	private ArrayList<Record> keyRing;
 
 	private PrivateKeyRing() {
-		keyRing = new ArrayList<>();
+		super();
 	}
 
 	public static PrivateKeyRing getInstance() {
@@ -122,87 +116,6 @@ public class PrivateKeyRing {
 		oos.writeObject(sealedObject);
 
 		oos.close();
-	}
-
-	// La key restituita è una chiave opaca
-	public Key getKey(String alias) throws Exception {
-		Record record = findRecord(alias);
-		if (record == null)
-			throw new Exception("Key not found!");
-
-		byte[] encodedKey = record.getEncodedKey();
-		String keyType = record.getKeyType();
-		String keyAlgorithm = keyType.split("/")[0];
-		String keyFormat = keyType.split("/")[1];
-
-		Key key = null;
-		if (keyAlgorithm.equals("RSA") || keyAlgorithm.equals("DSA")) {
-			KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm);
-
-			if (keyFormat.equals("X.509"))
-				key = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			else if (keyFormat.equals("PKCS#8"))
-				key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
-		} else {
-			// Genero la chiave opaca a partire dall'array di byte
-			// (SecretKeySpec implementa sia KeySpec che SecretKey). Opero in
-			// questo modo perché in Java manca il SecretKeyFactory per AES (è
-			// un bug conosciuto, sono supportati solo DES e DESede).
-			// http://bugs.java.com/view_bug.do?bug_id=7022467
-			key = new SecretKeySpec(encodedKey, keyAlgorithm);
-		}
-
-		if (key == null)
-			throw new Exception("Invalid key type!");
-
-		return key;
-	}
-
-	// La key presa in ingresso è una chiave opaca
-	public void setKey(String alias, Key key, String keyType) {
-		Record record = findRecord(alias);
-		if (record != null)
-			keyRing.remove(record);
-
-		keyRing.add(new Record(alias, key.getEncoded(), keyType));
-	}
-
-	// Funzioncina di comodo da documentare
-	private Record findRecord(String alias) {
-		Record record = null;
-		for (Record r : keyRing)
-			if (r.getAlias().equals(alias))
-				record = r;
-		return record;
-	}
-
-	// Classe innestata da documentare
-	public static final class Record implements Serializable {
-
-		private static final long serialVersionUID = 1L;
-
-		private String alias;
-		private byte[] encodedKey;
-		private String keyType; // "Algorithm/Format" (e.g. RSA/X.509)
-
-		public Record(String alias, byte[] encodedKey, String keyType) {
-			this.alias = alias;
-			this.encodedKey = encodedKey;
-			this.keyType = keyType;
-		}
-
-		public String getAlias() {
-			return alias;
-		}
-
-		public byte[] getEncodedKey() {
-			return encodedKey;
-		}
-
-		public String getKeyType() {
-			return keyType;
-		}
-
 	}
 
 }
