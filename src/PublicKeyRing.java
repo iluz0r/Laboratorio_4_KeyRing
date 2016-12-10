@@ -19,7 +19,6 @@ public class PublicKeyRing extends KeyRing {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void load(InputStream is) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(is);
 		keyRing = (ArrayList<Record>) ois.readObject();

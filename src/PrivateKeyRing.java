@@ -60,7 +60,6 @@ public class PrivateKeyRing extends KeyRing {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void load(InputStream is, char[] password)
 			throws GeneralSecurityException, IOException, ClassNotFoundException {
 		// Recupero salt e IV
