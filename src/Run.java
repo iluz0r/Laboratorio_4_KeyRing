@@ -1,20 +1,32 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.security.Key;
+import java.io.OutputStreamWriter;
+//import java.security.Key;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
+//import java.security.KeyPair;
+//import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 public class Run {
 
-	private final static String groupName = "I2X3";
+	private final static String groupName = "Foo";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -22,66 +34,66 @@ public class Run {
 		 ************************************************************************************************/
 		PrivateKeyRing skr = PrivateKeyRing.getInstance();
 
-		// Genero la coppia di chiavi RSA per cifrare/decifrare
-		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-		keyPairGen.initialize(1024);
-		KeyPair RSAKeyPair = keyPairGen.genKeyPair();
-
-		// Genero la coppia di chiavi DSA per firmare/verificare
-		keyPairGen = KeyPairGenerator.getInstance("DSA");
-		keyPairGen.initialize(1024);
-		KeyPair DSAKeyPair = keyPairGen.genKeyPair();
-
-		// Inserisco le coppie di chiavi generate (RSA e DSA) nel mazzo di
-		// chiavi privato
-		Key key = RSAKeyPair.getPublic();
-		// EPK = public encryption key
-		skr.setKey(groupName + "_EPK", key, key.getAlgorithm() + "/" + key.getFormat());
-
-		key = RSAKeyPair.getPrivate();
-		// ESK = private decryption key
-		skr.setKey(groupName + "_ESK", key, key.getAlgorithm() + "/" + key.getFormat());
-
-		key = DSAKeyPair.getPublic();
-		// SPK = public verification key
-		skr.setKey(groupName + "_SPK", key, key.getAlgorithm() + "/" + key.getFormat());
-
-		key = DSAKeyPair.getPrivate();
-		// SSK = private signing key
-		skr.setKey(groupName + "_SSK", key, key.getAlgorithm() + "/" + key.getFormat());
-
-		// Genero una chiave AES a 128 bit
-		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-		keyGen.init(128);
-		SecretKey AESKey = keyGen.generateKey();
-
-		// Genero una chiave DESede a 168 bit
-		keyGen = KeyGenerator.getInstance("DESede");
-		keyGen.init(168);
-		SecretKey DESedeKey = keyGen.generateKey();
-
-		// Inserisco le chiavi AES e DESede nel mazzo di chiavi privato
-		skr.setKey(groupName + "_AES", AESKey, AESKey.getAlgorithm() + "/" + AESKey.getFormat());
-		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
-
-		// Ottengo le chiavi del KeyRing privato e le stampo a video in base64
-		String epkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_EPK").getEncoded());
-		String eskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_ESK").getEncoded());
-		String spkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SPK").getEncoded());
-		String sskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SSK").getEncoded());
-		String aesPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
-		String desedePreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
-
-		System.out.println("/*** CHIAVI PRIMA DELLA LOAD DAL DISCO ***/");
-		System.out.println(epkPreload);
-		System.out.println(eskPreload);
-		System.out.println(spkPreload);
-		System.out.println(sskPreload);
-		System.out.println(aesPreload);
-		System.out.println(desedePreload);
-
-		// Salvo sul disco il KeyRing privato
-		skr.store(new FileOutputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
+//		// Genero la coppia di chiavi RSA per cifrare/decifrare
+//		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+//		keyPairGen.initialize(1024);
+//		KeyPair RSAKeyPair = keyPairGen.genKeyPair();
+//
+//		// Genero la coppia di chiavi DSA per firmare/verificare
+//		keyPairGen = KeyPairGenerator.getInstance("DSA");
+//		keyPairGen.initialize(1024);
+//		KeyPair DSAKeyPair = keyPairGen.genKeyPair();
+//
+//		// Inserisco le coppie di chiavi generate (RSA e DSA) nel mazzo di
+//		// chiavi privato
+//		Key key = RSAKeyPair.getPublic();
+//		// EPK = public encryption key
+//		skr.setKey(groupName + "_EPK", key, key.getAlgorithm() + "/" + key.getFormat());
+//
+//		key = RSAKeyPair.getPrivate();
+//		// ESK = private decryption key
+//		skr.setKey(groupName + "_ESK", key, key.getAlgorithm() + "/" + key.getFormat());
+//
+//		key = DSAKeyPair.getPublic();
+//		// SPK = public verification key
+//		skr.setKey(groupName + "_SPK", key, key.getAlgorithm() + "/" + key.getFormat());
+//
+//		key = DSAKeyPair.getPrivate();
+//		// SSK = private signing key
+//		skr.setKey(groupName + "_SSK", key, key.getAlgorithm() + "/" + key.getFormat());
+//
+//		// Genero una chiave AES a 128 bit
+//		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+//		keyGen.init(128);
+//		SecretKey AESKey = keyGen.generateKey();
+//
+//		// Genero una chiave DESede a 168 bit
+//		keyGen = KeyGenerator.getInstance("DESede");
+//		keyGen.init(168);
+//		SecretKey DESedeKey = keyGen.generateKey();
+//
+//		// Inserisco le chiavi AES e DESede nel mazzo di chiavi privato
+//		skr.setKey(groupName + "_AES", AESKey, AESKey.getAlgorithm() + "/" + AESKey.getFormat());
+//		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
+//
+//		// Ottengo le chiavi del KeyRing privato e le stampo a video in base64
+//		String epkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_EPK").getEncoded());
+//		String eskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_ESK").getEncoded());
+//		String spkPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SPK").getEncoded());
+//		String sskPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SSK").getEncoded());
+//		String aesPreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
+//		String desedePreload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
+//
+//		System.out.println("/*** CHIAVI PRIMA DELLA LOAD DAL DISCO ***/");
+//		System.out.println(epkPreload);
+//		System.out.println(eskPreload);
+//		System.out.println(spkPreload);
+//		System.out.println(sskPreload);
+//		System.out.println(aesPreload);
+//		System.out.println(desedePreload);
+//
+//		// Salvo sul disco il KeyRing privato
+//		skr.store(new FileOutputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
 
 		// Carico il KeyRing privato dal disco
 		skr.load(new FileInputStream(new File("privateKeyRing.bin")), "paperino".toCharArray());
@@ -93,7 +105,7 @@ public class Run {
 		String aesPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
 		String desedePostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
 
-		System.out.println("\n/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
+		System.out.println("/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
 		System.out.println(epkPostload);
 		System.out.println(eskPostload);
 		System.out.println(spkPostload);
@@ -101,11 +113,11 @@ public class Run {
 		System.out.println(aesPostload);
 		System.out.println(desedePostload);
 
-		if (epkPreload.equals(epkPostload) && eskPreload.equals(eskPostload) && spkPreload.equals(spkPostload)
-				&& sskPreload.equals(sskPostload) && aesPreload.equals(aesPostload)
-				&& desedePreload.equals(desedePostload))
-			System.out.println(
-					"\nLe chiavi recuperate dal disco sono identiche alle chiavi presenti nel KeyRing prima del salvataggio");
+//		if (epkPreload.equals(epkPostload) && eskPreload.equals(eskPostload) && spkPreload.equals(spkPostload)
+//				&& sskPreload.equals(sskPostload) && aesPreload.equals(aesPostload)
+//				&& desedePreload.equals(desedePostload))
+//			System.out.println(
+//					"\nLe chiavi recuperate dal disco sono identiche alle chiavi presenti nel KeyRing prima del salvataggio");
 
 		/*************************************************************************************************
 		 ******************************* GESTIONE DEL KEYRING PUBBLICO ***********************************
@@ -138,7 +150,85 @@ public class Run {
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("Linneo_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
+		// Salvo sul disco il KeyRing pubblico
 		pkr.store(new FileOutputStream(new File("publicKeyRing.bin")));
+
+		/*************************************************************************************************
+		 ************************************* GESTIONE DEL TESTING **************************************
+		 ************************************************************************************************/
+		// Calcolo la data corrente nel formato dd/mm/yyyy
+		Date date = Calendar.getInstance().getTime();
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		String today = formatter.format(date);
+
+		// Genero un nonce di 20 byte
+		byte[] nonce = new byte[20];
+		SecureRandom sr = new SecureRandom();
+		sr.nextBytes(nonce);
+
+		// Genero una chiave AES a 128 bit
+		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		keyGen.init(128);
+		SecretKey AESKey = keyGen.generateKey();
+
+		// Recupero dal PublicKeyRing la EPK del team Ancora e inizializzo il
+		// cifrario in modalità RSA con questa chiave
+		PublicKey ancoraEPK = (PublicKey) pkr.getKey("Ancora_EPK");
+		Cipher cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
+
+		// Salvo sul file la chiave (opaca) AES generata in precedenza,
+		// cifrandola con RSA (con chiave pubblica del team Ancora)
+		FileOutputStream fos = new FileOutputStream(new File("test.bin"));
+		CipherOutputStream cos = new CipherOutputStream(fos, cipher);
+		cos.write(AESKey.getEncoded());
+		cos.close();
+		
+		// Ottengo una istanza del cipher e lo inizializzo
+		cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, AESKey);
+		
+		// Salvo l'IV sul file
+		fos = new FileOutputStream(new File("test.bin"), true);
+		fos.write(cipher.getIV());
+		fos.close();
+
+		// Scrivo il file cifrato sul disco
+		fos = new FileOutputStream(new File("test.bin"), true);
+		cos = new CipherOutputStream(fos, cipher);
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(cos, "UTF-8"));
+		bw.write("**********************************************\n");
+		bw.write("* Laurea Magistrale in Ingegneria Informatica\n");
+		bw.write("* Corso di Sicurezza Informatica\n");
+		bw.write("* Messaggio del " + today + "\n");
+		bw.write("* Dal gruppo: Foo\n");
+		bw.write("* Al gruppo: Ancora\n");
+		bw.write("* Nonce: " + Base64.getEncoder().encodeToString(nonce) + "\n");
+		bw.write("**********************************************");
+		bw.close();
+
+		Signature dsa = Signature.getInstance("SHA1withDSA");
+		PrivateKey fooSSK = (PrivateKey) skr.getKey("Foo_SSK");
+		dsa.initSign(fooSSK);
+
+		FileInputStream fis = new FileInputStream(new File("test.bin"));
+		BufferedInputStream bis = new BufferedInputStream(fis);
+		byte[] buffer = new byte[1024];
+		int len;
+		while ((len = bis.read(buffer)) >= 0) {
+			dsa.update(buffer, 0, len);
+		}
+		bis.close();
+
+		byte[] signature = dsa.sign();
+
+		cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
+
+		fos = new FileOutputStream(new File("signature.bin"));
+		cos = new CipherOutputStream(fos, cipher);
+		cos.write(signature);
+		cos.close();
 	}
 
 }
