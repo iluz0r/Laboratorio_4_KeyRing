@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -208,9 +209,9 @@ public class Run {
 		bw.close();
 
 		// Ottengo una istanza di Signature e la inizializzo con la Foo_SSK
-		Signature dsa = Signature.getInstance("SHA1withDSA");
+		Signature sig = Signature.getInstance("SHA1withDSA");
 		PrivateKey fooSSK = (PrivateKey) skr.getKey("Foo_SSK");
-		dsa.initSign(fooSSK);
+		sig.initSign(fooSSK);
 
 		// Prelevo i dati che devono essere firmati e li aggiorno con il metodo update
 		FileInputStream fis = new FileInputStream(new File("test.bin"));
@@ -218,12 +219,12 @@ public class Run {
 		byte[] buffer = new byte[1024];
 		int len;
 		while ((len = bis.read(buffer)) >= 0) {
-			dsa.update(buffer, 0, len);
+			sig.update(buffer, 0, len);
 		}
 		bis.close();
 
 		// Firmo i dati ottenendo la signature
-		byte[] signature = dsa.sign();
+		byte[] signature = sig.sign();
 
 		// Salvo sul disco la signature cifrata con RSA (con la chiave pubblica del team Ancora)
 		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
@@ -233,6 +234,40 @@ public class Run {
 		cos = new CipherOutputStream(fos, cipher);
 		cos.write(signature);
 		cos.close();
+		
+//		// Ottengo la chiave pubblica DSA del team Ancora
+//		PublicKey ancoraSPK = (PublicKey) pkr.getKey("Ancora_SPK");
+//		
+//		// Ottengo la chiave privata RSA del mio team
+//		PrivateKey fooESK = (PrivateKey) skr.getKey("Foo_ESK");
+//		
+//		// Decifro con RSA (con la chiave privata del mio team) il file signature.bin e ottengo la signature da verificare
+//		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+//		cipher.init(Cipher.DECRYPT_MODE, fooESK);
+//		fis = new FileInputStream(new File("signature.bin"));
+//		CipherInputStream cis = new CipherInputStream(fis, cipher);
+//		byte[] sigToVerify = new byte[cis.available()];
+//		cis.read(sigToVerify);
+//		cis.close();
+//		
+//		// Inizializzo l'oggetto Signature per la verifica della signature
+//		sig = Signature.getInstance("SHA1WithDSA");
+//		sig.initVerify(ancoraSPK);
+//		
+//		// Prelevo i dati che devono essere verificati e li aggiorno col metodo update
+//		fis = new FileInputStream(new File("test.bin"));
+//		bis = new BufferedInputStream(fis);
+//
+//		buffer = new byte[1024];
+//		while (bis.available() != 0) {
+//		    len = bis.read(buffer);
+//		    sig.update(buffer, 0, len);
+//		}
+//		bis.close();
+//		
+//		// Verifico la signature
+//		boolean verifies = sig.verify(sigToVerify);
+//		System.out.println("Signature verifies: " + verifies);
 	}
 
 }
