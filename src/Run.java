@@ -241,7 +241,7 @@ public class Run {
 //		// Ottengo la chiave privata RSA del mio team
 //		PrivateKey fooESK = (PrivateKey) skr.getKey("Foo_ESK");
 //		
-//		// Decifro con RSA (con la chiave privata del mio team) il file signature.bin e ottengo la signature da verificare
+//		// Decifro con RSA (con Foo_ESK) il file signature.bin e ottengo la signature da verificare
 //		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 //		cipher.init(Cipher.DECRYPT_MODE, fooESK);
 //		fis = new FileInputStream(new File("signature.bin"));
