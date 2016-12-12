@@ -3,6 +3,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 //import java.security.Key;
 import java.security.KeyFactory;
@@ -217,13 +219,15 @@ public class Run {
 			sig.update(buffer, 0, len);
 		bis.close();
 
-		// Firmo i dati ottenendo la signature e la salvo sul disco
+		// Firmo i dati ottenendo la signature e la salvo sul disco assieme al
+		// flag
 		byte[] signature = sig.sign();
 
 		fos = new FileOutputStream(new File("test.bin"));
-		fos.write((byte) 0x00);
-		fos.write(signature);
-		fos.close();
+		fos.write(0x00);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(signature);
+		oos.close();
 
 		// Genero una chiave AES a 128 bit
 		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -265,6 +269,15 @@ public class Run {
 		bis.close();
 		cos.close();
 
+		fis = new FileInputStream(new File("test.bin"));
+		int flag = fis.read();
+		System.out.println("Flag: " + flag);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		byte[] sigToVerify = (byte[]) ois.readObject();
+		ois.close();
+		System.out.println("Lunghezza signature: " + sigToVerify.length);
+		for(byte b : sigToVerify) 
+			System.out.print(b + " ");
 		// // Ottengo la chiave pubblica DSA del team Ancora
 		// PublicKey ancoraSPK = (PublicKey) pkr.getKey("Ancora_SPK");
 		//
