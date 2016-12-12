@@ -307,6 +307,7 @@ public class Run {
 		// testDecrypted.txt
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
 		fos = new FileOutputStream(new File("testDecrypted.txt"));
+		
 		buffer = new byte[1024];
 		while ((len = cis.read(buffer)) > 0)
 			fos.write(buffer, 0, len);
@@ -323,10 +324,8 @@ public class Run {
 		bis = new BufferedInputStream(fis);
 
 		buffer = new byte[1024];
-		while (bis.available() != 0) {
-			len = bis.read(buffer);
+		while ((len = bis.read(buffer)) > 0) 
 			sig.update(buffer, 0, len);
-		}
 		bis.close();
 
 		// Verifico la signature
