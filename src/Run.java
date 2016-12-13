@@ -23,7 +23,6 @@ import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
-//import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -222,15 +221,13 @@ public class Run {
 			sig.update(buffer, 0, len);
 		bis.close();
 
-		// Firmo i dati ottenendo la signature e la salvo sul disco assieme al
-		// flag
+		// Firmo i dati ottenendo la signature e la salvo sul disco (come
+		// object) assieme al flag
 		byte[] signature = sig.sign();
-
+		
 		fos = new FileOutputStream(new File("test.bin"));
 		fos.write(0x00);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(signature);
-		oos.close();
+		fos.write(signature);
 
 		// Genero una chiave AES a 128 bit
 		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -275,9 +272,25 @@ public class Run {
 		// Testing: lettura del file ricevuto dal team Ancora
 		fis = new FileInputStream(new File("test.bin"));
 		int flag = fis.read();
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		byte[] sigToVerify = (byte[]) ois.readObject();
-
+		byte header1 = (byte) fis.read();
+		byte header2 = (byte) fis.read();
+		
+		byte[] sigToVerify = null;
+		if(header2 == 44) {
+			sigToVerify = new byte[46];
+			fis.read(sigToVerify, 2, 44);
+		}
+		if(header2 == 45) {
+			sigToVerify = new byte[47];
+			fis.read(sigToVerify, 2, 45);
+		}
+		if(header2 == 46) {
+			sigToVerify = new byte[48];
+			fis.read(sigToVerify, 2, 46);
+		}
+		sigToVerify[0] = header1;
+		sigToVerify[1] = header2;
+		
 		PrivateKey fooESK = (PrivateKey) skr.getKey("Foo_ESK");
 		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 		cipher.init(Cipher.DECRYPT_MODE, fooESK);
@@ -307,13 +320,13 @@ public class Run {
 		// testDecrypted.txt
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
 		fos = new FileOutputStream(new File("testDecrypted.txt"));
-		
+
 		buffer = new byte[1024];
 		while ((len = cis.read(buffer)) > 0)
 			fos.write(buffer, 0, len);
 		cis.close();
 		fos.close();
-		
+
 		// Inizializzo l'oggetto Signature per la verifica della signature
 		sig = Signature.getInstance("SHA1WithDSA");
 		sig.initVerify(ancoraSPK);
@@ -324,7 +337,7 @@ public class Run {
 		bis = new BufferedInputStream(fis);
 
 		buffer = new byte[1024];
-		while ((len = bis.read(buffer)) > 0) 
+		while ((len = bis.read(buffer)) > 0)
 			sig.update(buffer, 0, len);
 		bis.close();
 
