@@ -3,8 +3,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 //import java.security.Key;
 import java.security.KeyFactory;
@@ -177,6 +175,45 @@ public class Run {
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("Linneo_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
+		// Gruppo DomenicoM
+		keyFactory = KeyFactory.getInstance("RSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4+irxZi0XX6qqDYT+eJGYP+7QI78ecC8qntniGboBv8VO2Uwcm3gvfc/ufg7O12GmWgxG+cCNQNtY2hKiKa5+ZPLxLka1AxbQzyYynUoePWQa8wxklqPKYg389ywPJ+E+L8hxcTQE3wPPFujKNOvqG2U70EXqXzYITjzZjkLnmwIDAQAB");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("DomenicoM_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+		keyFactory = KeyFactory.getInstance("DSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAITTzEdbcjEj1NzhOv+JUWWXVz+Y+2sFV5xHoZ/M1bAypsI0Vq1T+kJFVzd3It0PAfwcBCjgI5yrvZlq72GJa3n22AHQoD6C3xTDOFq23FxtDncM6EXuXIkF25JRQD21TNQniN6XTMZqSsQlGtPOmc4AybAIzIY90rxHgBeLxxIZ");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("DomenicoM_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+		
+		// Gruppo Doriana
+		keyFactory = KeyFactory.getInstance("RSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKLSv1g+DJoaXlwnRMngt+Q9I4SRutTjrbY7JhSXNV2JcBWR9/cKbhrivbOoqVWQnfUjkRPJLZQfORoGI1YmNXrspxVQ7v75ZLn6lWjWd4QklzaayVW74RgN1HRnyU66iPikCTXMT9FkvIg+wh4IHX4afavQjg1dl6BIXnhUYoYQIDAQAB");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("Doriana_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+		keyFactory = KeyFactory.getInstance("DSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAHqFhTzkF8cV7D33wPwqBbYvhj72NG8yz3LMGVhNlQndliOavVMJiXG6K2wTjpOISES3ry7Ck+AkmWwhLoP0BST2+s+uxJM25wBly63DWKQ+LgJejNocL3BVnTtPtchPgCzVc43tYvrCt3+9NwFNlw9OUH+VuDTXKi0FCXVNHfvo=");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("Doriana_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+		
+		// Gruppo IPini
+		keyFactory = KeyFactory.getInstance("RSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDudrQ9SD1QgI8dZqmz0DUDO3cGdvd/SclrnJqTcn0qPuxKz9doGjfFB9SxkWnr3JDc8ooLgg9lMxRdjunGTqt2Wk2COqBLiC7d+ZOkiGfae4icHgWngYSdtQ+RW8K+bTpMlyneaXiQvE8l/w35I1DAHz08gEvEzMZt3+v3nRLEdwIDAQAB");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("IPini_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+		keyFactory = KeyFactory.getInstance("DSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAQRrs90eRKYJnmht3epyBR2lb5/Hg/mEJUMjuic80XIIZx74YO0pLSnAa9lg9QMWdeZVQYO0zB4JfBU5UidEesOhmKYX8MBUk+on5eRirO2P6zeQ0xxnmaCUGgL4vaoSodG1NNq/TFBmhpuVUYrtgirjzK2EJ8NDFrieDEI4Wjl8=");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("IPini_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
 		// Salvo sul disco il KeyRing pubblico
 		pkr.store(new FileOutputStream(new File("publicKeyRing.bin")));
 
@@ -201,7 +238,7 @@ public class Run {
 		bw.write("* Corso di Sicurezza Informatica\n");
 		bw.write("* Messaggio del " + today + "\n");
 		bw.write("* Dal gruppo: Foo\n");
-		bw.write("* Al gruppo: Ancora\n");
+		bw.write("* Al gruppo: Doriana\n");
 		bw.write("* Nonce: " + Base64.getEncoder().encodeToString(nonce) + "\n");
 		bw.write("**********************************************");
 		bw.close();
@@ -224,8 +261,8 @@ public class Run {
 		// Firmo i dati ottenendo la signature e la salvo sul disco (come
 		// object) assieme al flag
 		byte[] signature = sig.sign();
-		
-		fos = new FileOutputStream(new File("test.bin"));
+
+		fos = new FileOutputStream(new File("testDoriana.bin"));
 		fos.write(0x00);
 		fos.write(signature);
 
@@ -236,13 +273,13 @@ public class Run {
 
 		// Recupero dal PublicKeyRing la EPK del team Ancora e inizializzo il
 		// cifrario in modalità RSA con questa chiave
-		PublicKey ancoraEPK = (PublicKey) skr.getKey("Foo_EPK");
+		PublicKey dorianaEPK = (PublicKey) pkr.getKey("Doriana_EPK");
 		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-		cipher.init(Cipher.ENCRYPT_MODE, ancoraEPK);
+		cipher.init(Cipher.ENCRYPT_MODE, dorianaEPK);
 
 		// Salvo sul file la chiave (opaca) AES generata in precedenza,
 		// cifrandola con RSA (con chiave pubblica del team Ancora)
-		fos = new FileOutputStream(new File("test.bin"), true);
+		fos = new FileOutputStream(new File("testDoriana.bin"), true);
 		CipherOutputStream cos = new CipherOutputStream(fos, cipher);
 		cos.write(AESKey.getEncoded());
 		cos.close();
@@ -252,7 +289,7 @@ public class Run {
 		cipher.init(Cipher.ENCRYPT_MODE, AESKey);
 
 		// Salvo l'IV sul file
-		fos = new FileOutputStream(new File("test.bin"), true);
+		fos = new FileOutputStream(new File("testDoriana.bin"), true);
 		fos.write(cipher.getIV());
 		fos.close();
 
@@ -260,7 +297,7 @@ public class Run {
 		// AESKey scrivendolo sul file
 		fis = new FileInputStream(new File("test.txt"));
 		bis = new BufferedInputStream(fis);
-		fos = new FileOutputStream(new File("test.bin"), true);
+		fos = new FileOutputStream(new File("testDoriana.bin"), true);
 		cos = new CipherOutputStream(fos, cipher);
 		buffer = new byte[1024];
 
@@ -270,27 +307,27 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File("test.bin"));
+		fis = new FileInputStream(new File("testDoriana.bin"));
 		int flag = fis.read();
 		byte header1 = (byte) fis.read();
 		byte header2 = (byte) fis.read();
-		
+
 		byte[] sigToVerify = null;
-		if(header2 == 44) {
+		if (header2 == 44) {
 			sigToVerify = new byte[46];
 			fis.read(sigToVerify, 2, 44);
 		}
-		if(header2 == 45) {
+		if (header2 == 45) {
 			sigToVerify = new byte[47];
 			fis.read(sigToVerify, 2, 45);
 		}
-		if(header2 == 46) {
+		if (header2 == 46) {
 			sigToVerify = new byte[48];
 			fis.read(sigToVerify, 2, 46);
 		}
 		sigToVerify[0] = header1;
 		sigToVerify[1] = header2;
-		
+
 		PrivateKey fooESK = (PrivateKey) skr.getKey("Foo_ESK");
 		cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 		cipher.init(Cipher.DECRYPT_MODE, fooESK);
@@ -303,9 +340,6 @@ public class Run {
 
 		// Ottengo la SecretKey AES a partire dal vettore di byte
 		AESKey = new SecretKeySpec(AESKeyBytes, "AES");
-
-		// Ottengo la chiave pubblica DSA del team Ancora
-		PublicKey ancoraSPK = (PublicKey) skr.getKey("Foo_SPK");
 
 		// Ottengo l'IV
 		byte[] IV = new byte[16];
@@ -327,6 +361,9 @@ public class Run {
 		cis.close();
 		fos.close();
 
+		// Ottengo la chiave pubblica DSA del team Ancora
+		PublicKey ancoraSPK = (PublicKey) skr.getKey("Foo_SPK");
+		
 		// Inizializzo l'oggetto Signature per la verifica della signature
 		sig = Signature.getInstance("SHA1WithDSA");
 		sig.initVerify(ancoraSPK);
