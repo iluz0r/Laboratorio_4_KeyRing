@@ -308,23 +308,33 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File("testDoriana.bin"));
+		fis = new FileInputStream(new File("testFoo.txt"));
 		int flag = fis.read();
-		byte header1 = (byte) fis.read();
-		byte header2 = (byte) fis.read();
 
+		FileInputStream fisSig = null;
+		if (flag == 1)
+			fisSig = new FileInputStream(new File("signature.sig"));
+		else
+			fisSig = fis;
+
+		// Leggo i primi due header della firma
+		byte header1 = (byte) fisSig.read();
+		byte header2 = (byte) fisSig.read();
+
+		// Leggo la firma in base al secondo header
 		byte[] sigToVerify = null;
+		
 		if (header2 == 44) {
 			sigToVerify = new byte[46];
-			fis.read(sigToVerify, 2, 44);
+			fisSig.read(sigToVerify, 2, 44);
 		}
 		if (header2 == 45) {
 			sigToVerify = new byte[47];
-			fis.read(sigToVerify, 2, 45);
+			fisSig.read(sigToVerify, 2, 45);
 		}
 		if (header2 == 46) {
 			sigToVerify = new byte[48];
-			fis.read(sigToVerify, 2, 46);
+			fisSig.read(sigToVerify, 2, 46);
 		}
 		sigToVerify[0] = header1;
 		sigToVerify[1] = header2;
@@ -363,11 +373,11 @@ public class Run {
 		fos.close();
 
 		// Ottengo la chiave pubblica DSA del team Ancora
-		PublicKey ancoraSPK = (PublicKey) skr.getKey("Foo_SPK");
+		PublicKey sndGroupSPK = (PublicKey) pkr.getKey("DomenicoM_SPK");
 
 		// Inizializzo l'oggetto Signature per la verifica della signature
 		sig = Signature.getInstance("SHA1WithDSA");
-		sig.initVerify(ancoraSPK);
+		sig.initVerify(sndGroupSPK);
 
 		// Prelevo i dati che devono essere verificati e li aggiorno col
 		// metodo update
