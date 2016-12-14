@@ -31,7 +31,7 @@ public class Run {
 
 	private final static String groupName = "Foo";
 	private final static String recvGroupName = "DomenicoM";
-	private final static String sndGroupName = "Doriana";
+	private final static String sndGroupName = "DomenicoM";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
