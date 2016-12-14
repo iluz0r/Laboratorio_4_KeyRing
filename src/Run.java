@@ -31,6 +31,7 @@ public class Run {
 
 	private final static String groupName = "Foo";
 	private final static String recvGroupName = "DomenicoM";
+	private final static String sndGroupName = "Doriana";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -232,15 +233,15 @@ public class Run {
 		sr.nextBytes(nonce);
 
 		// Scrivo il file da scambiare (in chiaro) sul disco
-		FileOutputStream fos = new FileOutputStream(new File("test.txt"));
+		FileOutputStream fos = new FileOutputStream(new File("file.txt"));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
-		bw.write("**********************************************\n");
-		bw.write("* Laurea Magistrale in Ingegneria Informatica\n");
-		bw.write("* Corso di Sicurezza Informatica\n");
-		bw.write("* Messaggio del " + today + "\n");
-		bw.write("* Dal gruppo: Foo\n");
-		bw.write("* Al gruppo: " + recvGroupName + "\n");
-		bw.write("* Nonce: " + Base64.getEncoder().encodeToString(nonce) + "\n");
+		bw.write("**********************************************" + System.getProperty("line.separator"));
+		bw.write("* Laurea Magistrale in Ingegneria Informatica" + System.getProperty("line.separator"));
+		bw.write("* Corso di Sicurezza Informatica" + System.getProperty("line.separator"));
+		bw.write("* Messaggio del " + today + System.getProperty("line.separator"));
+		bw.write("* Dal gruppo: Foo" + System.getProperty("line.separator"));
+		bw.write("* Al gruppo: " + recvGroupName + System.getProperty("line.separator"));
+		bw.write("* Nonce: " + Base64.getEncoder().encodeToString(nonce) + System.getProperty("line.separator"));
 		bw.write("**********************************************");
 		bw.close();
 
@@ -251,7 +252,7 @@ public class Run {
 
 		// Prelevo i dati che devono essere firmati e li aggiorno con il metodo
 		// update
-		FileInputStream fis = new FileInputStream(new File("test.txt"));
+		FileInputStream fis = new FileInputStream(new File("file.txt"));
 		BufferedInputStream bis = new BufferedInputStream(fis);
 		byte[] buffer = new byte[1024];
 		int len;
@@ -263,7 +264,7 @@ public class Run {
 		// object) assieme al flag
 		byte[] signature = sig.sign();
 
-		fos = new FileOutputStream(new File("test" + recvGroupName + ".bin"));
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"));
 		fos.write(0x00);
 		fos.write(signature);
 
@@ -280,7 +281,7 @@ public class Run {
 
 		// Salvo sul file la chiave (opaca) AES generata in precedenza,
 		// cifrandola con RSA (con chiave pubblica del team Ancora)
-		fos = new FileOutputStream(new File("test" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
 		CipherOutputStream cos = new CipherOutputStream(fos, cipher);
 		cos.write(AESKey.getEncoded());
 		cos.close();
@@ -290,15 +291,15 @@ public class Run {
 		cipher.init(Cipher.ENCRYPT_MODE, AESKey);
 
 		// Salvo l'IV sul file
-		fos = new FileOutputStream(new File("test" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
 		fos.write(cipher.getIV());
 		fos.close();
 
 		// Leggo il file in chiaro e lo cifro con AES/CBC/PKCS5Padding con
 		// AESKey scrivendolo sul file
-		fis = new FileInputStream(new File("test.txt"));
+		fis = new FileInputStream(new File("file.txt"));
 		bis = new BufferedInputStream(fis);
-		fos = new FileOutputStream(new File("test" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
 		cos = new CipherOutputStream(fos, cipher);
 		buffer = new byte[1024];
 
@@ -308,7 +309,7 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File("testFoo.txt"));
+		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + ".bin"));
 		int flag = fis.read();
 
 		FileInputStream fisSig = null;
@@ -364,7 +365,7 @@ public class Run {
 		// Leggo il File cifrato dal messaggio e lo scrivo decifrato nel file
 		// testDecrypted.txt
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
-		fos = new FileOutputStream(new File("testDecrypted.txt"));
+		fos = new FileOutputStream(new File("fileDecrypted.txt"));
 
 		buffer = new byte[1024];
 		while ((len = cis.read(buffer)) > 0)
@@ -373,7 +374,7 @@ public class Run {
 		fos.close();
 
 		// Ottengo la chiave pubblica DSA del team Ancora
-		PublicKey sndGroupSPK = (PublicKey) pkr.getKey("DomenicoM_SPK");
+		PublicKey sndGroupSPK = (PublicKey) pkr.getKey(sndGroupName + "_SPK");
 
 		// Inizializzo l'oggetto Signature per la verifica della signature
 		sig = Signature.getInstance("SHA1WithDSA");
@@ -381,7 +382,7 @@ public class Run {
 
 		// Prelevo i dati che devono essere verificati e li aggiorno col
 		// metodo update
-		fis = new FileInputStream(new File("testDecrypted.txt"));
+		fis = new FileInputStream(new File("fileDecrypted.txt"));
 		bis = new BufferedInputStream(fis);
 
 		buffer = new byte[1024];
