@@ -30,8 +30,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class Run {
 
 	private final static String groupName = "Foo";
-	private final static String recvGroupName = "Linneo";
-	private final static String sndGroupName = "Linneo";
+	private final static String recvGroupName = "IPini";
+	private final static String sndGroupName = "IPini";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -206,13 +206,13 @@ public class Run {
 		// Gruppo IPini
 		keyFactory = KeyFactory.getInstance("RSA");
 		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDudrQ9SD1QgI8dZqmz0DUDO3cGdvd/SclrnJqTcn0qPuxKz9doGjfFB9SxkWnr3JDc8ooLgg9lMxRdjunGTqt2Wk2COqBLiC7d+ZOkiGfae4icHgWngYSdtQ+RW8K+bTpMlyneaXiQvE8l/w35I1DAHz08gEvEzMZt3+v3nRLEdwIDAQAB");
+				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeQao+8CdgVOE54RaLAp4aO+cJsz+0i72wWS8RL7jrTPl9RUzh+eFC3KuvP7TWUadnmxQD+oLQGQUkmwlzX0b4L6e3a8lJWG+dqUvF5FkU7iMBFoPx0d1yw9GIj3FYXJw0HPGYu6PNfu7oZtwELS+06Rxc9BqKodXGVAq7VZ2YnQIDAQAB");
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("IPini_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
 		keyFactory = KeyFactory.getInstance("DSA");
 		encodedKey = Base64.getDecoder().decode(
-				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAQRrs90eRKYJnmht3epyBR2lb5/Hg/mEJUMjuic80XIIZx74YO0pLSnAa9lg9QMWdeZVQYO0zB4JfBU5UidEesOhmKYX8MBUk+on5eRirO2P6zeQ0xxnmaCUGgL4vaoSodG1NNq/TFBmhpuVUYrtgirjzK2EJ8NDFrieDEI4Wjl8=");
+				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAIFmjUq0noM3N6TkGlP6fjZQHkMPRWiVUkm1TIldkMQiEQCn1sMv1nQ+mD+B9kszQHikaTLzgWg7dVjRMJbELZ/H2wep+K6i9Z9B71gZ+DWw88DYZ3s1MyY6E1sznujoB5ojxRdHjMdEvS/UEW7M+Iq8UKk0kh1M3F4YD+KI/GrB");
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("IPini_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 		
@@ -277,7 +277,7 @@ public class Run {
 		// object) assieme al flag
 		byte[] signature = sig.sign();
 
-		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"));
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".txt.enc"));
 		fos.write(0x00);
 		fos.write(signature);
 
@@ -294,7 +294,7 @@ public class Run {
 
 		// Salvo sul file la chiave (opaca) AES generata in precedenza,
 		// cifrandola con RSA (con chiave pubblica del team Ancora)
-		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".txt.enc"), true);
 		CipherOutputStream cos = new CipherOutputStream(fos, cipher);
 		cos.write(AESKey.getEncoded());
 		cos.close();
@@ -304,7 +304,7 @@ public class Run {
 		cipher.init(Cipher.ENCRYPT_MODE, AESKey);
 
 		// Salvo l'IV sul file
-		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".txt.enc"), true);
 		fos.write(cipher.getIV());
 		fos.close();
 
@@ -312,7 +312,7 @@ public class Run {
 		// AESKey scrivendolo sul file
 		fis = new FileInputStream(new File("file.txt"));
 		bis = new BufferedInputStream(fis);
-		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".bin"), true);
+		fos = new FileOutputStream(new File(groupName + "_to_" + recvGroupName + ".txt.enc"), true);
 		cos = new CipherOutputStream(fos, cipher);
 		buffer = new byte[1024];
 
@@ -322,7 +322,7 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + ".enc"));
+		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + ".txt.enc"));
 		int flag = fis.read();
 
 		FileInputStream fisSig = null;
