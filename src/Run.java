@@ -31,7 +31,7 @@ public class Run {
 
 	private final static String groupName = "Foo";
 	private final static String recvGroupName = "Annita";
-	private final static String sndGroupName = "Linneo";
+	private final static String sndGroupName = "Annita";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -322,12 +322,12 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File("ToFoo/" + sndGroupName + "_to_" + groupName + ".txt.enc"));
+		fis = new FileInputStream(new File("ToFoo_ENC/" + sndGroupName + "_to_" + groupName + ".txt.enc"));
 		int flag = fis.read();
 
 		FileInputStream fisSig = null;
 		if (flag == 1)
-			fisSig = new FileInputStream(new File("ToFoo/" + "signature.sig"));
+			fisSig = new FileInputStream(new File("ToFoo_ENC/" + "signature.sig"));
 		else
 			fisSig = fis;
 
@@ -378,7 +378,7 @@ public class Run {
 		// Leggo il File cifrato dal messaggio e lo scrivo decifrato nel file
 		// testDecrypted.txt
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
-		fos = new FileOutputStream(new File(sndGroupName + "_to_" + groupName + "_DEC" + ".txt"));
+		fos = new FileOutputStream(new File("ToFoo_DEC/" + sndGroupName + "_to_" + groupName + ".txt"));
 
 		buffer = new byte[1024];
 		while ((len = cis.read(buffer)) > 0)
@@ -395,7 +395,7 @@ public class Run {
 
 		// Prelevo i dati che devono essere verificati e li aggiorno col
 		// metodo update
-		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + "_DEC" + ".txt"));
+		fis = new FileInputStream(new File("ToFoo_DEC/" + sndGroupName + "_to_" + groupName + ".txt"));
 		bis = new BufferedInputStream(fis);
 
 		buffer = new byte[1024];
