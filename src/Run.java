@@ -378,7 +378,7 @@ public class Run {
 		// Leggo il File cifrato dal messaggio e lo scrivo decifrato nel file
 		// testDecrypted.txt
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
-		fos = new FileOutputStream(new File("fileDecrypted.txt"));
+		fos = new FileOutputStream(new File(sndGroupName + "_to_" + groupName + "_DEC" + ".txt"));
 
 		buffer = new byte[1024];
 		while ((len = cis.read(buffer)) > 0)
@@ -395,7 +395,7 @@ public class Run {
 
 		// Prelevo i dati che devono essere verificati e li aggiorno col
 		// metodo update
-		fis = new FileInputStream(new File("fileDecrypted.txt"));
+		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + "_DEC" + ".txt"));
 		bis = new BufferedInputStream(fis);
 
 		buffer = new byte[1024];
