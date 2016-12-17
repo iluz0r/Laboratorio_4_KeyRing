@@ -30,8 +30,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class Run {
 
 	private final static String groupName = "Foo";
-	private final static String recvGroupName = "IPini";
-	private final static String sndGroupName = "IPini";
+	private final static String recvGroupName = "Annita";
+	private final static String sndGroupName = "Annita";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
