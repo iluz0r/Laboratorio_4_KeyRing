@@ -31,7 +31,7 @@ public class Run {
 
 	private final static String groupName = "Foo";
 	private final static String recvGroupName = "Annita";
-	private final static String sndGroupName = "Annita";
+	private final static String sndGroupName = "Linneo";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -322,12 +322,12 @@ public class Run {
 		cos.close();
 
 		// Testing: lettura del file ricevuto dal team Ancora
-		fis = new FileInputStream(new File(sndGroupName + "_to_" + groupName + ".txt.enc"));
+		fis = new FileInputStream(new File("ToFoo/" + sndGroupName + "_to_" + groupName + ".txt.enc"));
 		int flag = fis.read();
 
 		FileInputStream fisSig = null;
 		if (flag == 1)
-			fisSig = new FileInputStream(new File("signature.sig"));
+			fisSig = new FileInputStream(new File("ToFoo/" + "signature.sig"));
 		else
 			fisSig = fis;
 
