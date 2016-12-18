@@ -88,8 +88,7 @@ public class PrivateKeyRing extends KeyRing {
 	}
 
 	public void store(OutputStream os, char[] password) throws GeneralSecurityException, IOException {
-		// Genero la SecretKey (chiave opaca) a partire dalla password e dal
-		// salt
+		// Genero la SecretKey a partire dalla password e dal salt
 		SecureRandom random = new SecureRandom();
 		byte salt[] = new byte[8];
 		random.nextBytes(salt);
