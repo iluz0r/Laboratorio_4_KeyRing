@@ -1,0 +1,5 @@
+Cose da fare:
+
+1) Splittare il RunTest;
+2) Documentare i tre Run splittati;
+3) Cifrare/decifrare un file a piacere con le chiavi AES e DESede del PrivateKeyRing.
