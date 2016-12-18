@@ -4,15 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-//import java.security.Key;
-import java.security.KeyFactory;
-//import java.security.KeyPair;
-//import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
@@ -37,132 +32,11 @@ public class Run {
 		// Carico il KeyRing privato dal disco
 		PrivateKeyRing skr = PrivateKeyRing.getInstance();
 		skr.load(new FileInputStream(new File("privateKeyRing.enc")), "paperino".toCharArray());
-
-		String epkPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_EPK").getEncoded());
-		String eskPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_ESK").getEncoded());
-		String spkPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SPK").getEncoded());
-		String sskPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_SSK").getEncoded());
-		String aesPostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_AES").getEncoded());
-		String desedePostload = Base64.getEncoder().encodeToString(skr.getKey(groupName + "_DESede").getEncoded());
-
-		System.out.println("/*** CHIAVI DOPO LA LOAD DAL DISCO ***/");
-		System.out.println("Foo_EPK: " + epkPostload);
-		System.out.println("Foo_ESK: " + eskPostload);
-		System.out.println("Foo_SPK: " + spkPostload);
-		System.out.println("Foo_SSK: " + sskPostload);
-		System.out.println("Foo_AES: " + aesPostload);
-		System.out.println("Foo_DESede: " + desedePostload);
-
-		// if (epkPreload.equals(epkPostload) && eskPreload.equals(eskPostload)
-		// && spkPreload.equals(spkPostload)
-		// && sskPreload.equals(sskPostload) && aesPreload.equals(aesPostload)
-		// && desedePreload.equals(desedePostload))
-		// System.out.println(
-		// "\nLe chiavi recuperate dal disco sono identiche alle chiavi presenti
-		// nel KeyRing prima del salvataggio");
-
-		/*************************************************************************************************
-		 ******************************* GESTIONE DEL KEYRING PUBBLICO ***********************************
-		 ************************************************************************************************/
+		
+		// Carico il KeyRing pubblico dal disco
 		PublicKeyRing pkr = PublicKeyRing.getInstance();
+		pkr.load(new FileInputStream(new File("publicKeyRing.bin")));
 
-		// Gruppo Ancora
-		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		byte[] encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC87UbZBsXHzim7q/b0nndJpabIHJy21kFu3KHwYoNGUSYO8FO3a4mBQJ7itDh6K/IoQS2DTp5NNyEr+0uRzE1RuTbWHpY24U/dRhkvju2KnZPFA64tdr1s6d07t3LHaMPApY1Rn5YOl0myS/aJRDCxRUiF6TL8C92GTf9nxSfUpwIDAQAB");
-		PublicKey publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Ancora_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAGDCs+acIrdVF/aBdADLb6rOHDyAs3/WFTuk8Bx7KY5PQhAgl+6cazxkwqZHM1DJR23pFCFEkj23+V3fUufCTPj++d9NFYMNEuv82ZoBMML2uvlQb4lCNK+WpPez5d6jOkfe7P4aHJjAmIH9JBEs4Gi0NHdfbut6MQ+Wfw8pEzVs=");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Ancora_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo Linneo
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDbEoRGFuU3gw/1KYbgA05jANDgarKagEWlJblKnZ3AXlC00GetN9Evo6G4bo3z+r2eSlUaqFFJjTmiZgzb2fGHVFXoy9FyULV+HcOsWE6bJs/chYJ8hf78SxxCpqfBs9lj/vju2XoqTtizlDIx6ofuWq3LS58yDmLBNj2QWuVszQIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Linneo_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBANt+1c3mtZRGRP9xztdTKBZQhCGnsLbTIda4uAwKmstFOx53YsrQjG0c0kezdiH+NR3ER2y318pMUyRfEzCeS7rVQ2Pf6MOBbpqOHE9gaCDB4J0mLHVG2sQnjA+p7+smwtclsVEqJljq2/zW3E22Zf7lWLJatLbxp9UJDpgXEnt6");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Linneo_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo DomenicoM
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4+irxZi0XX6qqDYT+eJGYP+7QI78ecC8qntniGboBv8VO2Uwcm3gvfc/ufg7O12GmWgxG+cCNQNtY2hKiKa5+ZPLxLka1AxbQzyYynUoePWQa8wxklqPKYg389ywPJ+E+L8hxcTQE3wPPFujKNOvqG2U70EXqXzYITjzZjkLnmwIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("DomenicoM_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAITTzEdbcjEj1NzhOv+JUWWXVz+Y+2sFV5xHoZ/M1bAypsI0Vq1T+kJFVzd3It0PAfwcBCjgI5yrvZlq72GJa3n22AHQoD6C3xTDOFq23FxtDncM6EXuXIkF25JRQD21TNQniN6XTMZqSsQlGtPOmc4AybAIzIY90rxHgBeLxxIZ");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("DomenicoM_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo Doriana
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKLSv1g+DJoaXlwnRMngt+Q9I4SRutTjrbY7JhSXNV2JcBWR9/cKbhrivbOoqVWQnfUjkRPJLZQfORoGI1YmNXrspxVQ7v75ZLn6lWjWd4QklzaayVW74RgN1HRnyU66iPikCTXMT9FkvIg+wh4IHX4afavQjg1dl6BIXnhUYoYQIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Doriana_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAHqFhTzkF8cV7D33wPwqBbYvhj72NG8yz3LMGVhNlQndliOavVMJiXG6K2wTjpOISES3ry7Ck+AkmWwhLoP0BST2+s+uxJM25wBly63DWKQ+LgJejNocL3BVnTtPtchPgCzVc43tYvrCt3+9NwFNlw9OUH+VuDTXKi0FCXVNHfvo=");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Doriana_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo IPini
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeQao+8CdgVOE54RaLAp4aO+cJsz+0i72wWS8RL7jrTPl9RUzh+eFC3KuvP7TWUadnmxQD+oLQGQUkmwlzX0b4L6e3a8lJWG+dqUvF5FkU7iMBFoPx0d1yw9GIj3FYXJw0HPGYu6PNfu7oZtwELS+06Rxc9BqKodXGVAq7VZ2YnQIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("IPini_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAIFmjUq0noM3N6TkGlP6fjZQHkMPRWiVUkm1TIldkMQiEQCn1sMv1nQ+mD+B9kszQHikaTLzgWg7dVjRMJbELZ/H2wep+K6i9Z9B71gZ+DWw88DYZ3s1MyY6E1sznujoB5ojxRdHjMdEvS/UEW7M+Iq8UKk0kh1M3F4YD+KI/GrB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("IPini_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo Annita
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCO2KJupdTgs94be7Edw/U/RqHopf0XpKDH4mWRon2u0p2q+luPQrOrka15FMf2/zFq179r3EfbysldXZa8GY2K0pPnewA4Wj3cqwnxE+NUcOi9RsJ77LcOM5k8mhDtlpzT8aVZzvCPvF9VT0yaHvavlzdQdAe8SvN849yDW8BouwIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Annita_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGASdIF3f98EPX9ifyZ3Rjp5uZQbOcJfRqUh9mehDicuUoK34CaaPJDB5yehIpqH99qr0szxQCQSRk5jguEBF++ctur2dOL5jdSh6MeAvR1C0rdWjPx6Vm3NoFqEhXJFHGPfgPcHGOOlP/ydgk9odpKSkChCFU8YfhoK6j8bFBh8OI=");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("Annita_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Gruppo MakeNao
-		keyFactory = KeyFactory.getInstance("RSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7PqwXag83JgyvdXaTqexBSwnsY2R3iJhBCwXnwX2xb6zj16Kr5eBSECztWk81SLjqrazzgcC6+MJUz4feT4b5moCjxWttxrZd9pI8VwKEQtC/Wke1vjQS3XQ5Ytiriy6Y40d0Z0xoeUyj+v1BWIvoBW5PCFfETzFTxC7DuO4lbQIDAQAB");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("MakeNao_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		keyFactory = KeyFactory.getInstance("DSA");
-		encodedKey = Base64.getDecoder().decode(
-				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAIP0Oaq1vcjLrREooOmYcA6nMMmaSnbxmGrspBFrwGPqmVwu4VdRKBnc5l6LiCiSn8fg2UYGREzNln2wPz8LZCKeq8BfMjp73zJz9QqgPQZ65N2HWw+QjbA2kLj96GAaNSnSkgWt9150lAqnJ71HC3v2/MXZC1/O47EpGchT2lOm");
-		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-		pkr.setKey("MakeNao_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-		// Salvo sul disco il KeyRing pubblico
-		pkr.store(new FileOutputStream(new File("publicKeyRing.bin")));
-
-		/*************************************************************************************************
-		 ************************************* GESTIONE DEL TESTING **************************************
-		 ************************************************************************************************/
 		// Calcolo la data corrente nel formato dd/mm/yyyy
 		Date date = Calendar.getInstance().getTime();
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");

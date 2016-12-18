@@ -16,6 +16,7 @@ public class RunGenSKR {
 	private final static String groupName = "Foo";
 
 	public static void main(String[] args) {
+		// Ottengo l'istanza del PrivateKeyRing
 		PrivateKeyRing skr = PrivateKeyRing.getInstance();
 
 		// Genero la coppia di chiavi RSA per cifrare/decifrare
