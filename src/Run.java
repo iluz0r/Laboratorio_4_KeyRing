@@ -30,8 +30,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class Run {
 
 	private final static String groupName = "Foo";
-	private final static String recvGroupName = "Ancora";
-	private final static String sndGroupName = "Annita";
+	private final static String recvGroupName = "MakeNao";
+	private final static String sndGroupName = "MakeNao";
 
 	public static void main(String[] args) throws Exception {
 		/*************************************************************************************************
@@ -215,7 +215,7 @@ public class Run {
 				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAIFmjUq0noM3N6TkGlP6fjZQHkMPRWiVUkm1TIldkMQiEQCn1sMv1nQ+mD+B9kszQHikaTLzgWg7dVjRMJbELZ/H2wep+K6i9Z9B71gZ+DWw88DYZ3s1MyY6E1sznujoB5ojxRdHjMdEvS/UEW7M+Iq8UKk0kh1M3F4YD+KI/GrB");
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("IPini_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-		
+
 		// Gruppo Annita
 		keyFactory = KeyFactory.getInstance("RSA");
 		encodedKey = Base64.getDecoder().decode(
@@ -228,6 +228,19 @@ public class Run {
 				"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGASdIF3f98EPX9ifyZ3Rjp5uZQbOcJfRqUh9mehDicuUoK34CaaPJDB5yehIpqH99qr0szxQCQSRk5jguEBF++ctur2dOL5jdSh6MeAvR1C0rdWjPx6Vm3NoFqEhXJFHGPfgPcHGOOlP/ydgk9odpKSkChCFU8YfhoK6j8bFBh8OI=");
 		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 		pkr.setKey("Annita_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+		// Gruppo MakeNao
+		keyFactory = KeyFactory.getInstance("RSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7PqwXag83JgyvdXaTqexBSwnsY2R3iJhBCwXnwX2xb6zj16Kr5eBSECztWk81SLjqrazzgcC6+MJUz4feT4b5moCjxWttxrZd9pI8VwKEQtC/Wke1vjQS3XQ5Ytiriy6Y40d0Z0xoeUyj+v1BWIvoBW5PCFfETzFTxC7DuO4lbQIDAQAB");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("MakeNao_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+		keyFactory = KeyFactory.getInstance("DSA");
+		encodedKey = Base64.getDecoder().decode(
+				"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAIP0Oaq1vcjLrREooOmYcA6nMMmaSnbxmGrspBFrwGPqmVwu4VdRKBnc5l6LiCiSn8fg2UYGREzNln2wPz8LZCKeq8BfMjp73zJz9QqgPQZ65N2HWw+QjbA2kLj96GAaNSnSkgWt9150lAqnJ71HC3v2/MXZC1/O47EpGchT2lOm");
+		publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+		pkr.setKey("MakeNao_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
 		// Salvo sul disco il KeyRing pubblico
 		pkr.store(new FileOutputStream(new File("publicKeyRing.bin")));
@@ -337,7 +350,7 @@ public class Run {
 
 		// Leggo la firma in base al secondo header
 		byte[] sigToVerify = null;
-		
+
 		if (header2 == 44) {
 			sigToVerify = new byte[46];
 			fisSig.read(sigToVerify, 2, 44);
