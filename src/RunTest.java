@@ -22,7 +22,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Run {
+public class RunTest {
 
 	private final static String groupName = "Foo";
 	private final static String recvGroupName = "MakeNao";
