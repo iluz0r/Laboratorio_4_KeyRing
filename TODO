@@ -1,4 +1,3 @@
 Cose da fare:
 
-1) Documentare i 4 Run splittati;
-2) Cifrare/decifrare un file a piacere con le chiavi AES e DESede del PrivateKeyRing.
+1) Creazione del Run per cifrare/decifrare un file a piacere con le chiavi AES e DESede del PrivateKeyRing e documentarlo

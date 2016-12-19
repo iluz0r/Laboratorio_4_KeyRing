@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class RunReadPacket {
 
 	private final static String groupName = "Foo";
-	private final static String sndGroupName = "Doriana";
+	private final static String sndGroupName = "FrankAbba";
 
 	public static void main(String[] args) {
 		// Carico il KeyRing privato dal disco
@@ -63,8 +63,7 @@ public class RunReadPacket {
 		SecretKey AESKey = null;
 		try {
 			// Ottengo la chiave privata RSA del nostro team per poter decifrare
-			// la
-			// chiave AES letta dal pacchetto
+			// la chiave AES letta dal pacchetto
 			PrivateKey fooESK = (PrivateKey) skr.getKey("Foo_ESK");
 
 			// Ottengo la chiave AES dal pacchetto
