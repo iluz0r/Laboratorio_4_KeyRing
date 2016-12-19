@@ -81,31 +81,31 @@ public class RunGenPKR {
 			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 			pkr.setKey("MakeNao_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
-			// Gruppo FrankAbba
-			keyFactory = KeyFactory.getInstance("RSA");
-			encodedKey = Base64.getDecoder().decode(
-					"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCa2KBqEpkLkTXgoezrSYwXFiIFXa3CYNIqSY2xVVFM8AgzttJm9axRK8w20WsQZUA5ugP2l7VB/nLTKN3aXAJx5VL8ng7A4uYnrd+ImPemGWdGXXbEj4g2OOpVmCga71CKrIGehgvzLx4l1rnnIqgyf2Oi3rdpuRv4WyKpiaFhswIDAQAB");
-			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			pkr.setKey("FrankAbba_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-			keyFactory = KeyFactory.getInstance("DSA");
-			encodedKey = Base64.getDecoder().decode(
-					"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAOylVl4ZWoevyL6+LCQp20fbq/1YLywcSoNb6IinyiiKt+HenmgIY9ir71AnX+jTmvKDL5+pCURoPcu4AWlxpy3QNOFlYzbrEfNDUDKJkUfH7RNaAryRkfDkyLdqSjIJw7W/UWW5QUmGLGg5dxqQAg2fmHfwZqBBJLgu30fLuFnO");
-			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			pkr.setKey("FrankAbba_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
-
-			// Gruppo LupLupi
+			// Gruppo LupiLupi
 			keyFactory = KeyFactory.getInstance("RSA");
 			encodedKey = Base64.getDecoder().decode(
 					"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKYq0ub5qYjqqUoE39CVQArDa043B0U/ynHwOFQOPppKlT9tOBAa2K4i8cIRwvlass9oyP1hjB+rWtpyJtyUF3uwkFQtwnHXiGZFmRZ8/OGW/K+vGPhuVFfC6WPQJ/3QiubjLyNG+n3zsaDe04ThDyYBrk1qjb1AOWKGBxASp8ywIDAQAB");
 			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			pkr.setKey("LupLupi_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+			pkr.setKey("LupiLupi_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 
 			keyFactory = KeyFactory.getInstance("DSA");
 			encodedKey = Base64.getDecoder().decode(
 					"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBAL9JGHJ0Ne2QYO0HVW6t1lEvJVpVdQlylr8T8bS8I1sYzJBie0LQZfAwMRte0EtwwY3ZNLZVxxU166RmZBVn7EGAKqiOWW8GEa0H41yehXBVHQwlHmxP2N0BPf+PN5WZgedVW6tvpkHgXXsf51A9TDghkETfzAmT5zGPZCcrIXfz");
 			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-			pkr.setKey("LupLupi_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+			pkr.setKey("LupiLupi_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+			
+			// Gruppo GalloSalvato
+			keyFactory = KeyFactory.getInstance("RSA");
+			encodedKey = Base64.getDecoder().decode(
+					"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXSZ+H1Z2Z90Jyjb8r+8dmHQUF9Ac78Z8Eqx4OPk9wjW3F38FMqpUuzaivMm8nt2FlQANdQQ6aa6pv4lkyC1/7lsFzo9olsQTLe/LFqpi0rdTSkQWfSdWsfCNUB5fzLuQqUTcALgHxMwaadOIapi8isiauz6wI3eRSMpMmqB7EmwIDAQAB");
+			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			pkr.setKey("GalloSalvato_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+			keyFactory = KeyFactory.getInstance("DSA");
+			encodedKey = Base64.getDecoder().decode(
+					"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAQt4jRJfROWmLDzoa8VRK+r7Xj59tpIi0d1a1fWAO+G51rCo5I8LELCYyoHalXK7mWC82Kub6bN4uHJ3Z11x0MTrbkEGzg8CJ7QBCpVJls7NoyPHOPQ9KoTgNho7rLbwGBMLd3LaoVFgZm4SO511A+CuN4PLOZ+QKMUJ+g7kAocg=");
+			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			pkr.setKey("GalloSalvato_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {

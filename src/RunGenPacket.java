@@ -28,7 +28,7 @@ import javax.crypto.SecretKey;
 public class RunGenPacket {
 
 	private final static String groupName = "Foo";
-	private final static String rcvGroupName = "LupLupi";
+	private final static String rcvGroupName = "Linneo";
 
 	public static void main(String[] args) {
 		// Carico il KeyRing privato dal disco
