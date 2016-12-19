@@ -1,4 +1,4 @@
 Cose da fare:
 
-1) Documentare i 4 Run splittati;
+1) Documentare i 4 Run splittati (solo 2 righe per dire cosa fa ciascuno);
 2) Cifrare/decifrare un file a piacere con le chiavi AES e DESede del PrivateKeyRing.
