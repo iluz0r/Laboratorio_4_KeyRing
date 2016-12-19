@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class RunReadPacket {
 
 	private final static String groupName = "Foo";
-	private final static String sndGroupName = "FrankAbba";
+	private final static String sndGroupName = "Linneo";
 
 	public static void main(String[] args) {
 		// Carico il KeyRing privato dal disco
