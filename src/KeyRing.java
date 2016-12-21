@@ -44,6 +44,7 @@ public abstract class KeyRing {
 
 	public void setKey(String alias, Key key, String keyType) {
 		Record record = findRecord(alias);
+		// Rimuovo e sovrascrivo il record già esistente
 		if (record != null)
 			keyRing.remove(record);
 
