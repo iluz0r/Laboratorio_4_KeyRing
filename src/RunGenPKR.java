@@ -119,6 +119,19 @@ public class RunGenPKR {
 					"MIIBuDCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYUAAoGBANZILOTmWFDES/5xLt8Uw90BZZvNtWAjT9dxEydHthpVZeTqhPJAEsRq7xs2gdKj/Xs2KKhUR62U8DknbA84Of6Bu06E4kUo+m0OdgbDbtxhFHWMQNaGk2+Wndwi6K7IA0nJ/aVAB9vII50wuSZ8IIkC5yrVgkz0j8rGQMY3SbNR");
 			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 			pkr.setKey("FrankAbba_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+			
+			// Gruppo GAS
+			keyFactory = KeyFactory.getInstance("RSA");
+			encodedKey = Base64.getDecoder().decode(
+					"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCECiOKl+CZkkM9YxZhwEMbLBalgxhwS6ksLSWt/6GTEaXvy3rYd1rti4dFb3oqLNXHMeXgwavfQrPpvqDRgW5vkn1PB4VhTmD7pfApE2RWJS2gZz4GlDImciAVtKMwH/NrJ/fzXb7+nN/VsH/b0ZGhwi985WF8PtpukAqS1oTSPwIDAQAB");
+			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			pkr.setKey("GAS_EPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
+
+			keyFactory = KeyFactory.getInstance("DSA");
+			encodedKey = Base64.getDecoder().decode(
+					"MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGADw+C8jOMuJJVhZIeUjRCFy+rPJMqOTVkyJloINktSK1nhCIYET1+vOSMV8OG3/QL7Ms1f/OmYWrK+KZ0hlegv5os2RMC6uqHyfB++Gigwf6Xc1+7NcO9BK7TZMTJ22BS7kNwve4HMyDCB8QB9SdPYoNV8tJ3IgBXG/yR5sOvQuA=");
+			publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			pkr.setKey("GAS_SPK", publicKey, publicKey.getAlgorithm() + "/" + publicKey.getFormat());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
