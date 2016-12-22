@@ -9,8 +9,6 @@ import java.security.spec.KeySpec;
 import java.util.ArrayList;
 
 import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -51,8 +49,7 @@ public class PrivateKeyRing extends KeyRing {
 		cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
 
 		// Leggo il KeyRing cifrato dal disco
-		CipherInputStream cis = new CipherInputStream(is, cipher);
-		ObjectInputStream ois = new ObjectInputStream(cis);
+		ObjectInputStream ois = new ObjectInputStream(is);
 		SealedObject sealedObject = (SealedObject) ois.readObject();
 		keyRing = (ArrayList<Record>) sealedObject.getObject(cipher);
 
@@ -81,8 +78,7 @@ public class PrivateKeyRing extends KeyRing {
 		os.write(cipher.getIV());
 
 		// Salvo il KeyRing sul disco
-		CipherOutputStream cos = new CipherOutputStream(os, cipher);
-		ObjectOutputStream oos = new ObjectOutputStream(cos);
+		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(sealedObject);
 
 		oos.close();
