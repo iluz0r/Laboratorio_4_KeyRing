@@ -42,14 +42,14 @@ public abstract class KeyRing {
 		return key;
 	}
 
-	public void setKey(String alias, Key key, String keyType) {
+	public void setKey(String alias, Key key) {
 		Record record = findRecord(alias);
 		
 		// Sovrascrivo il record già esistente
 		if (record != null)
 			keyRing.remove(record);
 
-		keyRing.add(new Record(alias, key.getEncoded(), keyType));
+		keyRing.add(new Record(alias, key.getEncoded(), key.getAlgorithm() + "/" + key.getFormat()));
 	}
 
 	private Record findRecord(String alias) {

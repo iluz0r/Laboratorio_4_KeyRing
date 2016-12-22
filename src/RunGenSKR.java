@@ -42,16 +42,16 @@ public class RunGenSKR {
 		// Inserisco le coppie di chiavi generate (RSA e DSA) nel mazzo di
 		// chiavi privato
 		Key key = RSAKeyPair.getPublic();
-		skr.setKey(groupName + "_EPK", key, key.getAlgorithm() + "/" + key.getFormat()); 
+		skr.setKey(groupName + "_EPK", key); 
 
 		key = RSAKeyPair.getPrivate();
-		skr.setKey(groupName + "_ESK", key, key.getAlgorithm() + "/" + key.getFormat());
+		skr.setKey(groupName + "_ESK", key);
 
 		key = DSAKeyPair.getPublic();
-		skr.setKey(groupName + "_SPK", key, key.getAlgorithm() + "/" + key.getFormat());
+		skr.setKey(groupName + "_SPK", key);
 
 		key = DSAKeyPair.getPrivate();
-		skr.setKey(groupName + "_SSK", key, key.getAlgorithm() + "/" + key.getFormat());
+		skr.setKey(groupName + "_SSK", key);
 
 		// Genero una chiave AES a 128 bit
 		SecretKey AESKey = null;
@@ -74,8 +74,8 @@ public class RunGenSKR {
 		}
 
 		// Inserisco le chiavi AES e DESede nel mazzo di chiavi privato
-		skr.setKey(groupName + "_AES", AESKey, AESKey.getAlgorithm() + "/" + AESKey.getFormat());
-		skr.setKey(groupName + "_DESede", DESedeKey, DESedeKey.getAlgorithm() + "/" + DESedeKey.getFormat());
+		skr.setKey(groupName + "_AES", AESKey);
+		skr.setKey(groupName + "_DESede", DESedeKey);
 
 		// Salvo sul disco il KeyRing privato
 		try {
